@@ -1,7 +1,8 @@
+import { Ionicons } from "@expo/vector-icons";
 import { DrawerScreenProps } from "@react-navigation/drawer";
 import { useFocusEffect } from "expo-router";
 import React, { useCallback, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { DrawerParamList } from "../navigation/DrawerNavigator";
 
 type Props = DrawerScreenProps<DrawerParamList, "Categories">;
@@ -55,6 +56,28 @@ const CategoriesScreen = ({ navigation }: Props) => {
       </TouchableOpacity>
     </View>
   );
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Categorias</Text>
+      {loading ? (
+        <ActivityIndicator size="large" color="#4B7BE5" />
+      ) : (
+        <FlatList
+          data={categories}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={renderItem}
+          contentContainerStyle={{ paddingBottom: 20 }}
+        />
+      )}
+      <TouchableOpacity
+      style={styles.fab}
+      onPress={() => navigation.navigate('CreateCategory')}
+    >
+      <Ionicons name="add" size={28} color="#fff"  />
+    </TouchableOpacity>
+    </View>
+  )
 };
 
 const styles = StyleSheet.create({
