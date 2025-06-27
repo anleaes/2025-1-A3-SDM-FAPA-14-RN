@@ -71,8 +71,7 @@ const DrawerNavigator = () => {
         drawerStyle: { backgroundColor: "#fff", width: 250 },
         headerStyle: { backgroundColor: "#4B7BE5" },
         headerTintColor: "#fff",
-        drawerType: "permanent", // <-- menu sempre fixo
-        // Não precisa de headerLeft no modo permanente
+        drawerType: "permanent",
       }}
     >
       <Drawer.Screen

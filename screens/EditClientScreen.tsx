@@ -23,7 +23,7 @@ const EditClientScreen = ({ route, navigation }: Props) => {
   useEffect(() => {
     setName(client.name);
     setEmail(client.email);
-    setCellPhone(client.cell_phone); // <-- ajuste aqui
+    setCellPhone(client.cell_phone); 
     setGender(client.gender);
   }, [client]);
 

@@ -37,7 +37,6 @@ const CreateReviewScreen = ({ navigation }: Props) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      // Clientes (com token)
       const token = "b23dc8f982be9e338ce972afe6065768a61f6a2e";
       const cliRes = await fetch("http://localhost:8000/clientes/", {
         headers: {
@@ -48,7 +47,6 @@ const CreateReviewScreen = ({ navigation }: Props) => {
       const cliData = await cliRes.json();
       setClients(Array.isArray(cliData) ? cliData : []);
 
-      // Hospedagens (sem token)
       const hosRes = await fetch("http://localhost:8000/hospedagens/");
       const hosData = await hosRes.json();
       setHostings(Array.isArray(hosData) ? hosData : []);
