@@ -1,4 +1,4 @@
-import { Picker } from "@react-native-picker/picker"; // <-- ajuste aqui!
+import { Picker } from "@react-native-picker/picker";
 import { DrawerScreenProps } from "@react-navigation/drawer";
 import { useFocusEffect } from "expo-router";
 import React, { useCallback, useEffect, useState } from "react";
@@ -36,7 +36,7 @@ const CreateHostingScreen = ({ navigation }: Props) => {
       setName("");
       setDescription("");
       setDailyPrice("");
-      setIsAvailable(true); // <-- ajuste aqui
+      setIsAvailable(true);
       setCategory(null);
       setAddress(null);
       // setDoc('');

@@ -22,7 +22,7 @@ const EditHostingScreen = ({ route, navigation }: Props) => {
   const [name, setName] = useState(hosting.name);
   const [description, setDescription] = useState(hosting.description);
   const [daily_price, setDailyPrice] = useState(String(hosting.daily_price));
-  const [is_available, setIsAvailable] = useState(hosting.is_available); // <-- corrigido
+  const [is_available, setIsAvailable] = useState(hosting.is_available);
   const [category, setCategory] = useState<Category | null>(
     hosting.category || null
   );

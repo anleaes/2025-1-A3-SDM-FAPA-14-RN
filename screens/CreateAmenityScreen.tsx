@@ -40,7 +40,7 @@ const CreateAmenityScreen = ({ navigation }: Props) => {
       body: JSON.stringify({
         name,
         description,
-        is_available, // <-- ajuste aqui
+        is_available,
         extra_cost: Number(extra_cost),
         // photo,
       }),

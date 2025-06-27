@@ -155,12 +155,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#E54848",
     padding: 8,
     borderRadius: 6,
-    // remova o marginRight daqui!
   },
   row: {
     flexDirection: "row",
     marginTop: 10,
-    justifyContent: "flex-end", // padronizado
+    justifyContent: "flex-end",
   },
 });
 
