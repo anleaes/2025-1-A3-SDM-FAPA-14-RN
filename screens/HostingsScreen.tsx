@@ -21,9 +21,9 @@ export type Hosting = {
   name: string;
   description: string;
   daily_price: number;
-  is_avaible: boolean;
-  category: Category;
-  address: Address;
+  is_available: boolean;
+  category?: Category | null;
+  address?: Address | null;
   // doc?: string;
   // photo?: string;
 };
@@ -34,8 +34,8 @@ const HostingsScreen = ({ navigation }: Props) => {
 
   const fetchHostings = async () => {
     setLoading(true);
-    const response = await fetch("http://localhost:8000/hospedagens/");
-    const data = await response.json();
+    const res = await fetch("http://localhost:8000/hospedagens/");
+    const data = await res.json();
     setHostings(data);
     setLoading(false);
   };
@@ -58,18 +58,20 @@ const HostingsScreen = ({ navigation }: Props) => {
       <Text style={styles.name}>{item.name}</Text>
       <Text style={styles.description}>{item.description}</Text>
       <Text style={styles.info}>
-        Preço diária: R$ {item.daily_price.toFixed(2)}
+        Preço diária: R$ {Number(item.daily_price).toFixed(2)}
       </Text>
       <Text style={styles.info}>
-        Disponível: {item.is_avaible ? "Sim" : "Não"}
+        Disponível: {item.is_available ? "Sim" : "Não"}
       </Text>
-      <Text style={styles.info}>Categoria: {item.category?.name}</Text>
       <Text style={styles.info}>
-        Endereço: {item.address?.street}, {item.address?.number} -{" "}
-        {item.address?.city}/{item.address?.state}
+        Categoria: {item.category?.name || "Não informado"}
       </Text>
-      {/* <Text>Documento: {item.doc}</Text> */}
-      {/* <Image source={{ uri: item.photo }}/> */}
+      <Text style={styles.info}>
+        Endereço:{" "}
+        {item.address
+          ? `${item.address.street}, ${item.address.number} - ${item.address.city}/${item.address.state}`
+          : "Não informado"}
+      </Text>
       <View style={styles.row}>
         <TouchableOpacity
           style={styles.editButton}

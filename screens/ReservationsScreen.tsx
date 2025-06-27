@@ -20,9 +20,9 @@ export type Reservation = {
   checkin_date: string;
   checkout_date: string;
   total_price: number;
-  status: "confirmed" | "pending" | "canceled";
-  payment_method: "credit_card" | "debit_card" | "Pix" | "payment_slip";
-  client: Client;
+  status: "CONFIRMED" | "PENDING" | "CANCELED";
+  payment_method: "CREDIT_CARD" | "DEBIT_CARD" | "PIX" | "PAYMENT_SLIP";
+  client?: Client | null;
   // doc?: string;
 };
 
@@ -32,8 +32,8 @@ const ReservationsScreen = ({ navigation }: Props) => {
 
   const fetchReservations = async () => {
     setLoading(true);
-    const response = await fetch("http://localhost:8000/reservas/");
-    const data = await response.json();
+    const res = await fetch("http://localhost:8000/reservas/");
+    const data = await res.json();
     setReservations(data);
     setLoading(false);
   };
@@ -53,26 +53,28 @@ const ReservationsScreen = ({ navigation }: Props) => {
 
   const renderItem = ({ item }: { item: Reservation }) => (
     <View style={styles.card}>
-      <Text style={styles.name}>
-        Cliente: {item.client?.name}
-      </Text>
+      <Text style={styles.name}>Cliente: {item.client?.name}</Text>
       <Text style={styles.info}>
         Check-in: {item.checkin_date} | Check-out: {item.checkout_date}
       </Text>
-      <Text style={styles.info}>Valor total: R$ {item.total_price.toFixed(2)}</Text>
       <Text style={styles.info}>
-        Status: {item.status === "confirmed"
+        Valor total: R$ {Number(item.total_price).toFixed(2)}
+      </Text>
+      <Text style={styles.info}>
+        Status:{" "}
+        {item.status === "CONFIRMED"
           ? "Confirmado"
-          : item.status === "pending"
+          : item.status === "PENDING"
           ? "Pendente"
           : "Cancelado"}
       </Text>
       <Text style={styles.info}>
-        Pagamento: {item.payment_method === "credit_card"
+        Pagamento:{" "}
+        {item.payment_method === "CREDIT_CARD"
           ? "Cartão de Crédito"
-          : item.payment_method === "debit_card"
+          : item.payment_method === "DEBIT_CARD"
           ? "Cartão de Débito"
-          : item.payment_method === "Pix"
+          : item.payment_method === "PIX"
           ? "PIX"
           : "Boleto"}
       </Text>
@@ -80,7 +82,9 @@ const ReservationsScreen = ({ navigation }: Props) => {
       <View style={styles.row}>
         <TouchableOpacity
           style={styles.editButton}
-          onPress={() => navigation.navigate("EditReservation", { reservation: item })}
+          onPress={() =>
+            navigation.navigate("EditReservation", { reservation: item })
+          }
         >
           <Text style={styles.editText}>Editar</Text>
         </TouchableOpacity>

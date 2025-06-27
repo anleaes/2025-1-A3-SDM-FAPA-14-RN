@@ -11,8 +11,6 @@ import {
   View,
 } from "react-native";
 import { DrawerParamList } from "../navigation/DrawerNavigator";
-import { Client } from "./ClientsScreen";
-import { Hosting } from "./HostingsScreen";
 
 type Props = DrawerScreenProps<DrawerParamList, "Reviews">;
 
@@ -20,8 +18,8 @@ export type Review = {
   id: number;
   rating: number;
   comment: string;
-  client: Client;
-  hosting: Hosting;
+  client?: { id: number; name: string };
+  hosting?: { id: number; name: string };
 };
 
 const ReviewsScreen = ({ navigation }: Props) => {
@@ -30,9 +28,9 @@ const ReviewsScreen = ({ navigation }: Props) => {
 
   const fetchReviews = async () => {
     setLoading(true);
-    const response = await fetch("http://localhost:8000/avaliacoes/");
-    const data = await response.json();
-    setReviews(data);
+    const res = await fetch("http://localhost:8000/avaliacoes/");
+    const data = await res.json();
+    setReviews(Array.isArray(data) ? data : []);
     setLoading(false);
   };
 
@@ -51,10 +49,14 @@ const ReviewsScreen = ({ navigation }: Props) => {
 
   const renderItem = ({ item }: { item: Review }) => (
     <View style={styles.card}>
-      <Text style={styles.name}>Hospedagem: {item.hosting?.name}</Text>
-      <Text style={styles.info}>Cliente: {item.client?.name}</Text>
+      <Text style={styles.name}>
+        Hospedagem: {item.hosting?.name || "Não informado"}
+      </Text>
+      <Text style={styles.info}>
+        Cliente: {item.client?.name || "Não informado"}
+      </Text>
       <Text style={styles.info}>Nota: {item.rating}</Text>
-      <Text style={styles.comment}>Comentário: {item.comment}</Text>
+      <Text style={styles.info}>Comentário: {item.comment}</Text>
       <View style={styles.row}>
         <TouchableOpacity
           style={styles.editButton}
@@ -128,13 +130,16 @@ const styles = StyleSheet.create({
   info: {
     fontSize: 14,
     color: "#666",
-    marginTop: 2,
+    marginTop: 4,
   },
-  comment: {
-    fontSize: 14,
-    color: "#444",
-    marginTop: 6,
-    fontStyle: "italic",
+  fab: {
+    position: "absolute",
+    right: 20,
+    bottom: 20,
+    backgroundColor: "#0D47A1",
+    borderRadius: 28,
+    padding: 14,
+    elevation: 4,
   },
   row: {
     flexDirection: "row",
@@ -155,15 +160,6 @@ const styles = StyleSheet.create({
   editText: {
     color: "#fff",
     fontWeight: "500",
-  },
-  fab: {
-    position: "absolute",
-    right: 20,
-    bottom: 20,
-    backgroundColor: "#0D47A1",
-    borderRadius: 28,
-    padding: 14,
-    elevation: 4,
   },
 });
 

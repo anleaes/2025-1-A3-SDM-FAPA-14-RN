@@ -1,10 +1,16 @@
+import { Ionicons } from "@expo/vector-icons";
 import { DrawerScreenProps } from "@react-navigation/drawer";
 import { useFocusEffect } from "expo-router";
 import React, { useCallback, useState } from "react";
-import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { DrawerParamList } from "../navigation/DrawerNavigator";
-import { Ionicons } from "@expo/vector-icons";
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { FlatList } from "react-native-gesture-handler";
+import { DrawerParamList } from "../navigation/DrawerNavigator";
 
 type Props = DrawerScreenProps<DrawerParamList, "Address">;
 
@@ -23,8 +29,8 @@ const AddressScreen = ({ navigation }: Props) => {
 
   const fetchAddresses = async () => {
     setLoading(true);
-    const response = await fetch("http://localhost:8000/enderecos/");
-    const data = await response.json();
+    const res = await fetch("http://localhost:8000/enderecos/");
+    const data = await res.json();
     setAddresses(data);
     setLoading(false);
   };
@@ -44,21 +50,27 @@ const AddressScreen = ({ navigation }: Props) => {
 
   const renderItem = ({ item }: { item: Address }) => (
     <View style={styles.card}>
-      <Text style={styles.name}>{item.street}, {item.number}</Text>
-      <Text style={styles.description}>{item.city} - {item.state}</Text>
+      <Text style={styles.name}>
+        {item.street}, {item.number}
+      </Text>
+      <Text style={styles.description}>
+        {item.city} - {item.state}
+      </Text>
       <Text style={styles.description}>CEP: {item.postal_code}</Text>
-      <TouchableOpacity
-        style={styles.editButton}
-        onPress={() => navigation.navigate("EditAddress", { address: item })}
-      >
-        <Text style={styles.editText}>Editar</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.deleteButton}
-        onPress={() => handleDelete(item.id)}
-      >
-        <Text style={styles.editText}>Excluir</Text>
-      </TouchableOpacity>
+      <View style={styles.row}>
+        <TouchableOpacity
+          style={styles.editButton}
+          onPress={() => navigation.navigate("EditAddress", { address: item })}
+        >
+          <Text style={styles.editText}>Editar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.deleteButton}
+          onPress={() => handleDelete(item.id)}
+        >
+          <Text style={styles.editText}>Excluir</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 
@@ -77,7 +89,7 @@ const AddressScreen = ({ navigation }: Props) => {
       )}
       <TouchableOpacity
         style={styles.fab}
-        onPress={() => navigation.navigate('CreateAddress')}
+        onPress={() => navigation.navigate("CreateAddress")}
       >
         <Ionicons name="add" size={28} color="#fff" />
       </TouchableOpacity>
@@ -143,12 +155,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#E54848",
     padding: 8,
     borderRadius: 6,
-    marginRight: 8,
   },
   row: {
     flexDirection: "row",
-    marginTop: 8,
-    alignSelf: "flex-end",
+    marginTop: 10,
+    justifyContent: "flex-end",
   },
 });
 

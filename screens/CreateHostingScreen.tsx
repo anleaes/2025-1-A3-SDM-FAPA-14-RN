@@ -22,7 +22,7 @@ const CreateHostingScreen = ({ navigation }: Props) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [daily_price, setDailyPrice] = useState("");
-  const [is_avaible, setIsAvaible] = useState(true);
+  const [is_available, setIsAvailable] = useState(true);
   const [category, setCategory] = useState<Category | null>(null);
   const [address, setAddress] = useState<Address | null>(null);
   // const [doc, setDoc] = useState('');
@@ -36,7 +36,7 @@ const CreateHostingScreen = ({ navigation }: Props) => {
       setName("");
       setDescription("");
       setDailyPrice("");
-      setIsAvaible(true);
+      setIsAvailable(true); // <-- ajuste aqui
       setCategory(null);
       setAddress(null);
       // setDoc('');
@@ -68,7 +68,7 @@ const CreateHostingScreen = ({ navigation }: Props) => {
         name,
         description,
         daily_price: Number(daily_price),
-        is_avaible,
+        is_available: is_available,
         category: category.id,
         address: address.id,
         // doc,
@@ -99,7 +99,7 @@ const CreateHostingScreen = ({ navigation }: Props) => {
         keyboardType="numeric"
       />
       <Text style={styles.label}>Disponível</Text>
-      <Switch value={is_avaible} onValueChange={setIsAvaible} />
+      <Switch value={is_available} onValueChange={setIsAvailable} />
       <Text style={styles.label}>Categoria</Text>
       <View style={styles.pickerWrapper}>
         <Picker

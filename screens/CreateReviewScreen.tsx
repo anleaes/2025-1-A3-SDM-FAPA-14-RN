@@ -20,8 +20,8 @@ type Props = DrawerScreenProps<DrawerParamList, "CreateReview">;
 const CreateReviewScreen = ({ navigation }: Props) => {
   const [rating, setRating] = useState("");
   const [comment, setComment] = useState("");
-  const [client, setClient] = useState<Client | null>(null);
-  const [hosting, setHosting] = useState<Hosting | null>(null);
+  const [clientId, setClientId] = useState<number | undefined>(undefined);
+  const [hostingId, setHostingId] = useState<number | undefined>(undefined);
   const [clients, setClients] = useState<Client[]>([]);
   const [hostings, setHostings] = useState<Hosting[]>([]);
   const [saving, setSaving] = useState(false);
@@ -30,26 +30,34 @@ const CreateReviewScreen = ({ navigation }: Props) => {
     useCallback(() => {
       setRating("");
       setComment("");
-      setClient(null);
-      setHosting(null);
+      setClientId(undefined);
+      setHostingId(undefined);
     }, [])
   );
 
   useEffect(() => {
     const fetchData = async () => {
-      const cliRes = await fetch("http://localhost:8000/clientes/");
+      // Clientes (com token)
+      const token = "b23dc8f982be9e338ce972afe6065768a61f6a2e";
+      const cliRes = await fetch("http://localhost:8000/clientes/", {
+        headers: {
+          Authorization: `Token ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
       const cliData = await cliRes.json();
-      setClients(cliData);
+      setClients(Array.isArray(cliData) ? cliData : []);
 
+      // Hospedagens (sem token)
       const hosRes = await fetch("http://localhost:8000/hospedagens/");
       const hosData = await hosRes.json();
-      setHostings(hosData);
+      setHostings(Array.isArray(hosData) ? hosData : []);
     };
     fetchData();
   }, []);
 
   const handleSave = async () => {
-    if (!client || !hosting) return;
+    if (!clientId || !hostingId) return;
     setSaving(true);
     await fetch("http://localhost:8000/avaliacoes/", {
       method: "POST",
@@ -57,8 +65,8 @@ const CreateReviewScreen = ({ navigation }: Props) => {
       body: JSON.stringify({
         rating: Number(rating),
         comment,
-        client: client.id,
-        hosting: hosting.id,
+        client: clientId,
+        hosting: hostingId,
       }),
     });
     navigation.navigate("Reviews");
@@ -85,13 +93,7 @@ const CreateReviewScreen = ({ navigation }: Props) => {
       />
       <Text style={styles.label}>Cliente</Text>
       <View style={styles.pickerWrapper}>
-        <Picker
-          selectedValue={client?.id}
-          onValueChange={(itemValue) => {
-            const cli = clients.find((c) => c.id === itemValue);
-            setClient(cli || null);
-          }}
-        >
+        <Picker selectedValue={clientId} onValueChange={setClientId}>
           <Picker.Item label="Selecione..." value={undefined} />
           {clients.map((cli) => (
             <Picker.Item key={cli.id} label={cli.name} value={cli.id} />
@@ -100,13 +102,7 @@ const CreateReviewScreen = ({ navigation }: Props) => {
       </View>
       <Text style={styles.label}>Hospedagem</Text>
       <View style={styles.pickerWrapper}>
-        <Picker
-          selectedValue={hosting?.id}
-          onValueChange={(itemValue) => {
-            const hos = hostings.find((h) => h.id === itemValue);
-            setHosting(hos || null);
-          }}
-        >
+        <Picker selectedValue={hostingId} onValueChange={setHostingId}>
           <Picker.Item label="Selecione..." value={undefined} />
           {hostings.map((hos) => (
             <Picker.Item key={hos.id} label={hos.name} value={hos.id} />

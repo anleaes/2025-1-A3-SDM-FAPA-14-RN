@@ -22,9 +22,13 @@ const EditHostingScreen = ({ route, navigation }: Props) => {
   const [name, setName] = useState(hosting.name);
   const [description, setDescription] = useState(hosting.description);
   const [daily_price, setDailyPrice] = useState(String(hosting.daily_price));
-  const [is_avaible, setIsAvaible] = useState(hosting.is_avaible);
-  const [category, setCategory] = useState<Category>(hosting.category);
-  const [address, setAddress] = useState<Address>(hosting.address);
+  const [is_available, setIsAvailable] = useState(hosting.is_available); // <-- corrigido
+  const [category, setCategory] = useState<Category | null>(
+    hosting.category || null
+  );
+  const [address, setAddress] = useState<Address | null>(
+    hosting.address || null
+  );
   // const [doc, setDoc] = useState(hosting.doc || "");
   // const [photo, setPhoto] = useState(hosting.photo || "");
   const [categories, setCategories] = useState<Category[]>([]);
@@ -35,9 +39,9 @@ const EditHostingScreen = ({ route, navigation }: Props) => {
     setName(hosting.name);
     setDescription(hosting.description);
     setDailyPrice(String(hosting.daily_price));
-    setIsAvaible(hosting.is_avaible);
-    setCategory(hosting.category);
-    setAddress(hosting.address);
+    setIsAvailable(hosting.is_available);
+    setCategory(hosting.category || null);
+    setAddress(hosting.address || null);
     // setDoc(hosting.doc || "");
     // setPhoto(hosting.photo || "");
   }, [hosting]);
@@ -66,7 +70,7 @@ const EditHostingScreen = ({ route, navigation }: Props) => {
         name,
         description,
         daily_price: Number(daily_price),
-        is_avaible,
+        is_available,
         category: category.id,
         address: address.id,
         // doc,
@@ -97,7 +101,7 @@ const EditHostingScreen = ({ route, navigation }: Props) => {
         keyboardType="numeric"
       />
       <Text style={styles.label}>Disponível</Text>
-      <Switch value={is_avaible} onValueChange={setIsAvaible} />
+      <Switch value={is_available} onValueChange={setIsAvailable} />
       <Text style={styles.label}>Categoria</Text>
       <View style={styles.pickerWrapper}>
         <Picker
