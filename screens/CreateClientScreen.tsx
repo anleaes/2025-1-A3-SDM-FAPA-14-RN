@@ -17,6 +17,7 @@ const CreateClient = ({ navigation }: Props) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [gender, setGender] = useState<"M" | "F" | "O">("M");
   // const [doc, setDoc] = useState('');
   // const [photo, setPhoto] = useState('');
   const [saving, setSaving] = useState(false);
@@ -26,6 +27,7 @@ const CreateClient = ({ navigation }: Props) => {
       setName("");
       setEmail("");
       setPhone("");
+      setGender("M");
       // setDoc('');
       // setPhoto('');
     }, [])
@@ -43,6 +45,7 @@ const CreateClient = ({ navigation }: Props) => {
         name,
         email,
         phone,
+        gender,
         // doc,
         // photo,
       }),
@@ -70,6 +73,24 @@ const CreateClient = ({ navigation }: Props) => {
         style={styles.input}
         keyboardType="phone-pad"
       />
+      <Text style={styles.label}>Gênero</Text>
+      <View style={styles.genderRow}>
+        <Button
+          title="Masculino"
+          color={gender === "M" ? "#4B7BE5" : "#ccc"}
+          onPress={() => setGender("M")}
+        />
+        <Button
+          title="Feminino"
+          color={gender === "F" ? "#4B7BE5" : "#ccc"}
+          onPress={() => setGender("F")}
+        />
+        <Button
+          title="Outro"
+          color={gender === "O" ? "#4B7BE5" : "#ccc"}
+          onPress={() => setGender("O")}
+        />
+      </View>
       {/* 
       <Text style={styles.label}>Documento</Text>
       <TextInput
@@ -116,6 +137,11 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderRadius: 8,
     padding: 10,
+  },
+  genderRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 8,
   },
 });
 
