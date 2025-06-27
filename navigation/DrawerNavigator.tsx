@@ -21,8 +21,8 @@ import EditHostingScreen from "../screens/EditHostingScreen";
 import EditReservationHostingScreen from "../screens/EditReservationHostingScreen";
 import EditReviewScreen from "../screens/EditReviewScreen";
 import HomeScreen from "../screens/HomeScreen";
-import HostingScreen, { Hosting } from "../screens/HostingScreen";
-import ReservationHostingScreen, {
+import HostingsScreen, { Hosting } from "../screens/HostingsScreen";
+import ReservationHostingsScreen, {
   ReservationHosting,
 } from "../screens/ReservationHostingScreen";
 import ReviewsScreen, { Review } from "../screens/ReviewsScreen";
@@ -41,10 +41,10 @@ export type DrawerParamList = {
   Clients: undefined;
   CreateClient: undefined;
   EditClient: { client: Client };
-  Hosting: undefined;
+  Hostings: undefined;
   CreateHosting: undefined;
   EditHosting: { hosting: Hosting };
-  ReservationHosting: undefined;
+  ReservationHostings: undefined;
   CreateReservationHosting: undefined;
   EditReservationHosting: { reservationHosting: ReservationHosting };
   Reviews: undefined;
