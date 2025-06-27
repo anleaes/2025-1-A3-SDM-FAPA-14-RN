@@ -23,7 +23,7 @@ export type Client = {
   // photo?: string;
 };
 
-const ClientScreen = ({ navigation }: Props) => {
+const ClientsScreen = ({ navigation }: Props) => {
   const [clients, setClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -173,4 +173,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ClientScreen;
+export default ClientsScreen;
