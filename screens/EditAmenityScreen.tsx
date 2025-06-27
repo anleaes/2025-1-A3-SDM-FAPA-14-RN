@@ -17,7 +17,7 @@ const EditAmenityScreen = ({ route, navigation }: Props) => {
   const { amenity } = route.params;
   const [name, setName] = useState(amenity.name);
   const [description, setDescription] = useState(amenity.description);
-  const [is_avaible, setIsAvaible] = useState(amenity.is_avaible);
+  const [is_available, setIsAvailable] = useState(amenity.is_available);
   const [extra_cost, setExtraCost] = useState(String(amenity.extra_cost));
   // const [photo, setPhoto] = useState<string | null>(amenity.photo || null);
   const [saving, setSaving] = useState(false);
@@ -25,7 +25,7 @@ const EditAmenityScreen = ({ route, navigation }: Props) => {
   useEffect(() => {
     setName(amenity.name);
     setDescription(amenity.description);
-    setIsAvaible(amenity.is_avaible);
+    setIsAvailable(amenity.is_available);
     setExtraCost(String(amenity.extra_cost));
     // setPhoto(amenity.photo || null);
   }, [amenity]);
@@ -38,7 +38,7 @@ const EditAmenityScreen = ({ route, navigation }: Props) => {
       body: JSON.stringify({
         name,
         description,
-        is_avaible,
+        is_available, // <-- ajuste aqui
         extra_cost: Number(extra_cost),
         // photo,
       }),
@@ -59,7 +59,7 @@ const EditAmenityScreen = ({ route, navigation }: Props) => {
         multiline
       />
       <Text style={styles.label}>Disponível</Text>
-      <Switch value={is_avaible} onValueChange={setIsAvaible} />
+      <Switch value={is_available} onValueChange={setIsAvailable} />
       <Text style={styles.label}>Custo extra</Text>
       <TextInput
         value={extra_cost}

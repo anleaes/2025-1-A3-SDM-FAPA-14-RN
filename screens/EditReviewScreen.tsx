@@ -20,8 +20,12 @@ const EditReviewScreen = ({ route, navigation }: Props) => {
   const { review } = route.params;
   const [rating, setRating] = useState(String(review.rating));
   const [comment, setComment] = useState(review.comment);
-  const [client, setClient] = useState<Client>(review.client);
-  const [hosting, setHosting] = useState<Hosting>(review.hosting);
+  const [clientId, setClientId] = useState<number | undefined>(
+    review.client?.id
+  );
+  const [hostingId, setHostingId] = useState<number | undefined>(
+    review.hosting?.id
+  );
   const [clients, setClients] = useState<Client[]>([]);
   const [hostings, setHostings] = useState<Hosting[]>([]);
   const [saving, setSaving] = useState(false);
@@ -29,25 +33,33 @@ const EditReviewScreen = ({ route, navigation }: Props) => {
   useEffect(() => {
     setRating(String(review.rating));
     setComment(review.comment);
-    setClient(review.client);
-    setHosting(review.hosting);
+    setClientId(review.client?.id);
+    setHostingId(review.hosting?.id);
   }, [review]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const cliRes = await fetch("http://localhost:8000/clientes/");
+      // Clientes (com token)
+      const token = "b23dc8f982be9e338ce972afe6065768a61f6a2e";
+      const cliRes = await fetch("http://localhost:8000/clientes/", {
+        headers: {
+          Authorization: `Token ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
       const cliData = await cliRes.json();
-      setClients(cliData);
+      setClients(Array.isArray(cliData) ? cliData : []);
 
+      // Hospedagens (sem token)
       const hosRes = await fetch("http://localhost:8000/hospedagens/");
       const hosData = await hosRes.json();
-      setHostings(hosData);
+      setHostings(Array.isArray(hosData) ? hosData : []);
     };
     fetchData();
   }, []);
 
   const handleSave = async () => {
-    if (!client || !hosting) return;
+    if (!clientId || !hostingId) return;
     setSaving(true);
     await fetch(`http://localhost:8000/avaliacoes/${review.id}/`, {
       method: "PUT",
@@ -55,8 +67,8 @@ const EditReviewScreen = ({ route, navigation }: Props) => {
       body: JSON.stringify({
         rating: Number(rating),
         comment,
-        client: client.id,
-        hosting: hosting.id,
+        client: clientId,
+        hosting: hostingId,
       }),
     });
     navigation.navigate("Reviews");
@@ -83,13 +95,7 @@ const EditReviewScreen = ({ route, navigation }: Props) => {
       />
       <Text style={styles.label}>Cliente</Text>
       <View style={styles.pickerWrapper}>
-        <Picker
-          selectedValue={client?.id}
-          onValueChange={(itemValue) => {
-            const cli = clients.find((c) => c.id === itemValue);
-            if (cli) setClient(cli);
-          }}
-        >
+        <Picker selectedValue={clientId} onValueChange={setClientId}>
           <Picker.Item label="Selecione..." value={undefined} />
           {clients.map((cli) => (
             <Picker.Item key={cli.id} label={cli.name} value={cli.id} />
@@ -98,13 +104,7 @@ const EditReviewScreen = ({ route, navigation }: Props) => {
       </View>
       <Text style={styles.label}>Hospedagem</Text>
       <View style={styles.pickerWrapper}>
-        <Picker
-          selectedValue={hosting?.id}
-          onValueChange={(itemValue) => {
-            const hos = hostings.find((h) => h.id === itemValue);
-            if (hos) setHosting(hos);
-          }}
-        >
+        <Picker selectedValue={hostingId} onValueChange={setHostingId}>
           <Picker.Item label="Selecione..." value={undefined} />
           {hostings.map((hos) => (
             <Picker.Item key={hos.id} label={hos.name} value={hos.id} />

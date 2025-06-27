@@ -20,8 +20,8 @@ export type ReservationHosting = {
   id: number;
   quantity_days: number;
   unit_price: number;
-  reservation: Reservation;
-  hosting: Hosting;
+  reservation?: Reservation | null;
+  hosting?: Hosting | null;
 };
 
 const ReservationHostingsScreen = ({ navigation }: Props) => {
@@ -32,8 +32,8 @@ const ReservationHostingsScreen = ({ navigation }: Props) => {
 
   const fetchReservationHostings = async () => {
     setLoading(true);
-    const response = await fetch("http://localhost:8000/itens_reserva/");
-    const data = await response.json();
+    const res = await fetch("http://localhost:8000/itens_reserva/");
+    const data = await res.json();
     setReservationHostings(data);
     setLoading(false);
   };
@@ -56,14 +56,14 @@ const ReservationHostingsScreen = ({ navigation }: Props) => {
       <Text style={styles.name}>Hospedagem: {item.hosting?.name}</Text>
       <Text style={styles.info}>
         Reserva: #{item.reservation?.id} - Cliente:{" "}
-        {item.reservation?.client?.name}
+        {item.reservation?.client?.name || "Não informado"}
       </Text>
       <Text style={styles.info}>Dias: {item.quantity_days}</Text>
       <Text style={styles.info}>
-        Valor unitário: R$ {item.unit_price.toFixed(2)}
+        Valor unitário: R$ {Number(item.unit_price).toFixed(2)}
       </Text>
       <Text style={styles.info}>
-        Total: R$ {(item.quantity_days * item.unit_price).toFixed(2)}
+        Total: R$ {(item.quantity_days * Number(item.unit_price)).toFixed(2)}
       </Text>
       <View style={styles.row}>
         <TouchableOpacity

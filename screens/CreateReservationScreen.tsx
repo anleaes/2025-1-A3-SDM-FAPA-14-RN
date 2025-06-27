@@ -17,30 +17,29 @@ import { Client } from "./ClientsScreen";
 type Props = DrawerScreenProps<DrawerParamList, "CreateReservation">;
 
 const statusOptions = [
-  { label: "Confirmado", value: "confirmed" },
-  { label: "Pendente", value: "pending" },
-  { label: "Cancelado", value: "canceled" },
+  { label: "Confirmado", value: "CONFIRMED" },
+  { label: "Pendente", value: "PENDING" },
+  { label: "Cancelado", value: "CANCELED" },
 ];
 
 const paymentOptions = [
-  { label: "Cartão de Crédito", value: "credit_card" },
-  { label: "Cartão de Débito", value: "debit_card" },
-  { label: "PIX", value: "Pix" },
-  { label: "Boleto", value: "payment_slip" },
+  { label: "Cartão de Crédito", value: "CREDIT_CARD" },
+  { label: "Cartão de Débito", value: "DEBIT_CARD" },
+  { label: "PIX", value: "PIX" },
+  { label: "Boleto", value: "PAYMENT_SLIP" },
 ];
 
 const CreateReservationScreen = ({ navigation }: Props) => {
   const [checkin_date, setCheckinDate] = useState("");
   const [checkout_date, setCheckoutDate] = useState("");
   const [total_price, setTotalPrice] = useState("");
-  const [status, setStatus] = useState<"confirmed" | "pending" | "canceled">(
-    "pending"
+  const [status, setStatus] = useState<"CONFIRMED" | "PENDING" | "CANCELED">(
+    "PENDING"
   );
   const [payment_method, setPaymentMethod] = useState<
-    "credit_card" | "debit_card" | "Pix" | "payment_slip"
-  >("credit_card");
+    "CREDIT_CARD" | "DEBIT_CARD" | "PIX" | "PAYMENT_SLIP"
+  >("CREDIT_CARD");
   const [client, setClient] = useState<Client | null>(null);
-  // const [doc, setDoc] = useState("");
   const [clients, setClients] = useState<Client[]>([]);
   const [saving, setSaving] = useState(false);
 
@@ -49,18 +48,23 @@ const CreateReservationScreen = ({ navigation }: Props) => {
       setCheckinDate("");
       setCheckoutDate("");
       setTotalPrice("");
-      setStatus("pending");
-      setPaymentMethod("credit_card");
+      setStatus("PENDING");
+      setPaymentMethod("CREDIT_CARD");
       setClient(null);
-      // setDoc("");
     }, [])
   );
 
   useEffect(() => {
     const fetchClients = async () => {
-      const response = await fetch("http://localhost:8000/clientes/");
-      const data = await response.json();
-      setClients(data);
+      const token = "b23dc8f982be9e338ce972afe6065768a61f6a2e";
+      const res = await fetch("http://localhost:8000/clientes/", {
+        headers: {
+          Authorization: `Token ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      setClients(Array.isArray(data) ? data : []);
     };
     fetchClients();
   }, []);
@@ -78,7 +82,6 @@ const CreateReservationScreen = ({ navigation }: Props) => {
         status,
         payment_method,
         client: client.id,
-        // doc,
       }),
     });
     navigation.navigate("Reservations");
@@ -146,10 +149,6 @@ const CreateReservationScreen = ({ navigation }: Props) => {
           ))}
         </Picker>
       </View>
-      {/* 
-      <Text style={styles.label}>Documento</Text>
-      <TextInput value={doc} onChangeText={setDoc} style={styles.input} />
-      */}
       {saving ? (
         <ActivityIndicator size="large" color="#4B7BE5" />
       ) : (

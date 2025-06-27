@@ -1,43 +1,51 @@
-import { DrawerScreenProps } from '@react-navigation/drawer';
-import { useFocusEffect } from 'expo-router';
-import React, { useCallback, useState } from 'react';
-import { ActivityIndicator, Button, StyleSheet, Text, TextInput, View, Switch } from 'react-native';
-import { DrawerParamList } from '../navigation/DrawerNavigator';
+import { DrawerScreenProps } from "@react-navigation/drawer";
+import { useFocusEffect } from "expo-router";
+import React, { useCallback, useState } from "react";
+import {
+  ActivityIndicator,
+  Button,
+  StyleSheet,
+  Switch,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
+import { DrawerParamList } from "../navigation/DrawerNavigator";
 
-type Props = DrawerScreenProps<DrawerParamList, 'CreateAmenity'>;
+type Props = DrawerScreenProps<DrawerParamList, "CreateAmenity">;
 
 const CreateAmenityScreen = ({ navigation }: Props) => {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [is_avaible, setIsAvaible] = useState(false);
-  const [extra_cost, setExtraCost] = useState('');
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [is_available, setIsAvailable] = useState(false);
+  const [extra_cost, setExtraCost] = useState("");
   // const [photo, setPhoto] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
-      setName('');
-      setDescription('');
-      setIsAvaible(false);
-      setExtraCost('');
+      setName("");
+      setDescription("");
+      setIsAvailable(false);
+      setExtraCost("");
       // setPhoto(null);
     }, [])
   );
 
   const handleSave = async () => {
     setSaving(true);
-    await fetch('http://localhost:8000/comodidades/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    await fetch("http://localhost:8000/comodidades/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         name,
         description,
-        is_avaible,
+        is_available, // <-- ajuste aqui
         extra_cost: Number(extra_cost),
         // photo,
       }),
     });
-    navigation.navigate('Amenities');
+    navigation.navigate("Amenities");
     setSaving(false);
   };
 
@@ -45,11 +53,7 @@ const CreateAmenityScreen = ({ navigation }: Props) => {
     <View style={styles.container}>
       <Text style={styles.title}>Nova comodidade</Text>
       <Text style={styles.label}>Nome</Text>
-      <TextInput
-        value={name}
-        onChangeText={setName}
-        style={styles.input}
-      />
+      <TextInput value={name} onChangeText={setName} style={styles.input} />
       <Text style={styles.label}>Descrição</Text>
       <TextInput
         value={description}
@@ -58,10 +62,7 @@ const CreateAmenityScreen = ({ navigation }: Props) => {
         multiline
       />
       <Text style={styles.label}>Disponível</Text>
-      <Switch
-        value={is_avaible}
-        onValueChange={setIsAvaible}
-      />
+      <Switch value={is_available} onValueChange={setIsAvailable} />
       <Text style={styles.label}>Custo extra</Text>
       <TextInput
         value={extra_cost}
@@ -77,35 +78,36 @@ const CreateAmenityScreen = ({ navigation }: Props) => {
       //   style={styles.input}
       // />
       */}
-      {saving
-        ? <ActivityIndicator size="large" color="#4B7BE5" />
-        : <Button title="Salvar" onPress={handleSave} color="#4B7BE5" />
-      }
-      <Button title="Voltar" onPress={() => navigation.navigate('Amenities')} />
+      {saving ? (
+        <ActivityIndicator size="large" color="#4B7BE5" />
+      ) : (
+        <Button title="Salvar" onPress={handleSave} color="#4B7BE5" />
+      )}
+      <Button title="Voltar" onPress={() => navigation.navigate("Amenities")} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { 
-    flex: 1, 
-    padding: 16, 
-    backgroundColor: '#fff' 
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: "#fff",
   },
-  title: { 
-    fontSize: 20, 
-    fontWeight: 'bold', 
-    marginBottom: 12, 
-    alignSelf: 'center' 
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 12,
+    alignSelf: "center",
   },
-  label: { 
-    fontWeight: '600', 
-    marginTop: 12, 
-    marginBottom: 4 
+  label: {
+    fontWeight: "600",
+    marginTop: 12,
+    marginBottom: 4,
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderRadius: 8,
     padding: 10,
   },

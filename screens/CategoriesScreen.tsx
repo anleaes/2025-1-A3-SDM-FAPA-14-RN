@@ -2,7 +2,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { DrawerScreenProps } from "@react-navigation/drawer";
 import { useFocusEffect } from "expo-router";
 import React, { useCallback, useState } from "react";
-import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { DrawerParamList } from "../navigation/DrawerNavigator";
 
 type Props = DrawerScreenProps<DrawerParamList, "Categories">;
@@ -19,8 +26,8 @@ const CategoriesScreen = ({ navigation }: Props) => {
 
   const fetchCategories = async () => {
     setLoading(true);
-    const response = await fetch("http://localhost:8000/categorias/");
-    const data = await response.json();
+    const res = await fetch("http://localhost:8000/categorias/");
+    const data = await res.json();
     setCategories(data);
     setLoading(false);
   };
@@ -32,7 +39,7 @@ const CategoriesScreen = ({ navigation }: Props) => {
   );
 
   const handleDelete = async (id: number) => {
-    const res = await fetch("http://localhost:8000/categorias/${id}", {
+    const res = await fetch(`http://localhost:8000/categorias/${id}`, {
       method: "DELETE",
     });
     setCategories((prev) => prev.filter((c) => c.id !== id));
@@ -42,18 +49,22 @@ const CategoriesScreen = ({ navigation }: Props) => {
     <View style={styles.card}>
       <Text style={styles.name}>{item.name}</Text>
       <Text style={styles.description}>{item.description}</Text>
-      <TouchableOpacity
-        style={styles.editButton}
-        onPress={() => navigation.navigate("EditCategory", { category: item })}
-      >
-        <Text style={styles.editText}>Editar</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.deleteButton}
-        onPress={() => handleDelete(item.id)}
-      >
-        <Text style={styles.editText}>Excluir</Text>
-      </TouchableOpacity>
+      <View style={styles.row}>
+        <TouchableOpacity
+          style={styles.editButton}
+          onPress={() =>
+            navigation.navigate("EditCategory", { category: item })
+          }
+        >
+          <Text style={styles.editText}>Editar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.deleteButton}
+          onPress={() => handleDelete(item.id)}
+        >
+          <Text style={styles.editText}>Excluir</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 
@@ -71,13 +82,13 @@ const CategoriesScreen = ({ navigation }: Props) => {
         />
       )}
       <TouchableOpacity
-      style={styles.fab}
-      onPress={() => navigation.navigate('CreateCategory')}
-    >
-      <Ionicons name="add" size={28} color="#fff"  />
-    </TouchableOpacity>
+        style={styles.fab}
+        onPress={() => navigation.navigate("CreateCategory")}
+      >
+        <Ionicons name="add" size={28} color="#fff" />
+      </TouchableOpacity>
     </View>
-  )
+  );
 };
 
 const styles = StyleSheet.create({
@@ -115,16 +126,6 @@ const styles = StyleSheet.create({
     color: "#666",
     marginTop: 4,
   },
-  editButton: {
-    backgroundColor: "#4B7BE5",
-    padding: 8,
-    borderRadius: 6,
-    marginRight: 8,
-  },
-  editText: {
-    color: "#fff",
-    fontWeight: "500",
-  },
   fab: {
     position: "absolute",
     right: 20,
@@ -134,16 +135,25 @@ const styles = StyleSheet.create({
     padding: 14,
     elevation: 4,
   },
-  deleteButton: {
-    backgroundColor: "#E54848",
+  row: {
+    flexDirection: "row",
+    marginTop: 10,
+    justifyContent: "flex-end",
+  },
+  editButton: {
+    backgroundColor: "#4B7BE5",
     padding: 8,
     borderRadius: 6,
     marginRight: 8,
   },
-  row: {
-    flexDirection: "row",
-    marginTop: 8,
-    alignSelf: "flex-end",
+  deleteButton: {
+    backgroundColor: "#E54848",
+    padding: 8,
+    borderRadius: 6,
+  },
+  editText: {
+    color: "#fff",
+    fontWeight: "500",
   },
 });
 

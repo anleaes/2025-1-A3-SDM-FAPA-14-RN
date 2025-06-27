@@ -18,7 +18,7 @@ export type Client = {
   id: number;
   name: string;
   email: string;
-  phone: string;
+  cell_phone: string;
   gender: "M" | "F" | "O";
   // doc?: string;
   // photo?: string;
@@ -30,12 +30,12 @@ const ClientsScreen = ({ navigation }: Props) => {
 
   const fetchClients = async () => {
     setLoading(true);
-    const response = await fetch("http://localhost:8000/clientes/", {
+    const res = await fetch("http://localhost:8000/clientes/", {
       headers: {
         Authorization: "Token b23dc8f982be9e338ce972afe6065768a61f6a2e",
       },
     });
-    const data = await response.json();
+    const data = await res.json();
     setClients(data);
     setLoading(false);
   };
@@ -60,7 +60,9 @@ const ClientsScreen = ({ navigation }: Props) => {
     <View style={styles.card}>
       <Text style={styles.name}>{item.name}</Text>
       <Text style={styles.email}>Email: {item.email}</Text>
-      <Text style={styles.phone}>Telefone: {item.phone}</Text>
+      <Text style={styles.phone}>
+        Telefone: {item.cell_phone || "Não informado"}
+      </Text>
       <Text style={styles.phone}>
         Gênero:{" "}
         {item.gender === "M"

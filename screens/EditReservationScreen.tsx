@@ -16,51 +16,49 @@ import { Client } from "./ClientsScreen";
 type Props = DrawerScreenProps<DrawerParamList, "EditReservation">;
 
 const statusOptions = [
-  { label: "Confirmado", value: "confirmed" },
-  { label: "Pendente", value: "pending" },
-  { label: "Cancelado", value: "canceled" },
+  { label: "Confirmado", value: "CONFIRMED" },
+  { label: "Pendente", value: "PENDING" },
+  { label: "Cancelado", value: "CANCELED" },
 ];
 
 const paymentOptions = [
-  { label: "Cartão de Crédito", value: "credit_card" },
-  { label: "Cartão de Débito", value: "debit_card" },
-  { label: "PIX", value: "Pix" },
-  { label: "Boleto", value: "payment_slip" },
+  { label: "Cartão de Crédito", value: "CREDIT_CARD" },
+  { label: "Cartão de Débito", value: "DEBIT_CARD" },
+  { label: "PIX", value: "PIX" },
+  { label: "Boleto", value: "PAYMENT_SLIP" },
 ];
 
 const EditReservationScreen = ({ route, navigation }: Props) => {
   const { reservation } = route.params;
+
   const [checkin_date, setCheckinDate] = useState(reservation.checkin_date);
   const [checkout_date, setCheckoutDate] = useState(reservation.checkout_date);
   const [total_price, setTotalPrice] = useState(
     String(reservation.total_price)
   );
-  const [status, setStatus] = useState<"confirmed" | "pending" | "canceled">(
+  const [status, setStatus] = useState<"CONFIRMED" | "PENDING" | "CANCELED">(
     reservation.status
   );
   const [payment_method, setPaymentMethod] = useState<
-    "credit_card" | "debit_card" | "Pix" | "payment_slip"
+    "CREDIT_CARD" | "DEBIT_CARD" | "PIX" | "PAYMENT_SLIP"
   >(reservation.payment_method);
-  const [client, setClient] = useState<Client>(reservation.client);
-  // const [doc, setDoc] = useState(reservation.doc || "");
+  const [client, setClient] = useState<Client | null>(
+    reservation.client || null
+  );
   const [clients, setClients] = useState<Client[]>([]);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    setCheckinDate(reservation.checkin_date);
-    setCheckoutDate(reservation.checkout_date);
-    setTotalPrice(String(reservation.total_price));
-    setStatus(reservation.status);
-    setPaymentMethod(reservation.payment_method);
-    setClient(reservation.client);
-    // setDoc(reservation.doc || "");
-  }, [reservation]);
-
-  useEffect(() => {
     const fetchClients = async () => {
-      const response = await fetch("http://localhost:8000/clientes/");
-      const data = await response.json();
-      setClients(data);
+      const token = "b23dc8f982be9e338ce972afe6065768a61f6a2e";
+      const res = await fetch("http://localhost:8000/clientes/", {
+        headers: {
+          Authorization: `Token ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      setClients(Array.isArray(data) ? data : []);
     };
     fetchClients();
   }, []);
@@ -78,7 +76,6 @@ const EditReservationScreen = ({ route, navigation }: Props) => {
         status,
         payment_method,
         client: client.id,
-        // doc,
       }),
     });
     navigation.navigate("Reservations");
@@ -87,7 +84,8 @@ const EditReservationScreen = ({ route, navigation }: Props) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Editar reserva</Text>
+      <Text style={styles.title}>Editar Reserva</Text>
+
       <Text style={styles.label}>Data de Check-in</Text>
       <TextInput
         value={checkin_date}
@@ -95,6 +93,7 @@ const EditReservationScreen = ({ route, navigation }: Props) => {
         style={styles.input}
         placeholder="YYYY-MM-DD"
       />
+
       <Text style={styles.label}>Data de Check-out</Text>
       <TextInput
         value={checkout_date}
@@ -102,54 +101,50 @@ const EditReservationScreen = ({ route, navigation }: Props) => {
         style={styles.input}
         placeholder="YYYY-MM-DD"
       />
-      <Text style={styles.label}>Valor total</Text>
+
+      <Text style={styles.label}>Valor Total</Text>
       <TextInput
         value={total_price}
         onChangeText={setTotalPrice}
         style={styles.input}
         keyboardType="numeric"
       />
-      <Text style={styles.label}>Status do pagamento</Text>
+
+      <Text style={styles.label}>Status</Text>
       <View style={styles.pickerWrapper}>
-        <Picker
-          selectedValue={status}
-          onValueChange={(itemValue) => setStatus(itemValue)}
-        >
+        <Picker selectedValue={status} onValueChange={setStatus}>
           {statusOptions.map((opt) => (
             <Picker.Item key={opt.value} label={opt.label} value={opt.value} />
           ))}
         </Picker>
       </View>
-      <Text style={styles.label}>Método de pagamento</Text>
+
+      <Text style={styles.label}>Método de Pagamento</Text>
       <View style={styles.pickerWrapper}>
-        <Picker
-          selectedValue={payment_method}
-          onValueChange={(itemValue) => setPaymentMethod(itemValue)}
-        >
+        <Picker selectedValue={payment_method} onValueChange={setPaymentMethod}>
           {paymentOptions.map((opt) => (
             <Picker.Item key={opt.value} label={opt.label} value={opt.value} />
           ))}
         </Picker>
       </View>
+
       <Text style={styles.label}>Cliente</Text>
       <View style={styles.pickerWrapper}>
         <Picker
           selectedValue={client?.id}
-          onValueChange={(itemValue) => {
-            const cli = clients.find((c) => c.id === itemValue);
-            if (cli) setClient(cli);
+          onValueChange={(id) => {
+            const selected = clients.find((c) => c.id === id) || null;
+            setClient(selected);
           }}
         >
           <Picker.Item label="Selecione..." value={undefined} />
-          {clients.map((cli) => (
-            <Picker.Item key={cli.id} label={cli.name} value={cli.id} />
-          ))}
+          {Array.isArray(clients) &&
+            clients.map((c) => (
+              <Picker.Item key={c.id} label={c.name} value={c.id} />
+            ))}
         </Picker>
       </View>
-      {/* 
-      <Text style={styles.label}>Documento</Text>
-      <TextInput value={doc} onChangeText={setDoc} style={styles.input} />
-      */}
+
       {saving ? (
         <ActivityIndicator size="large" color="#4B7BE5" />
       ) : (

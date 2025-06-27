@@ -12,6 +12,7 @@ import CreateCategoryScreen from "../screens/CreateCategoryScreen";
 import CreateClientScreen from "../screens/CreateClientScreen";
 import CreateHostingScreen from "../screens/CreateHostingScreen";
 import CreateReservationHostingScreen from "../screens/CreateReservationHostingScreen";
+import CreateReservationScreen from "../screens/CreateReservationScreen";
 import CreateReviewScreen from "../screens/CreateReviewScreen";
 import EditAddressScreen from "../screens/EditAddressScreen";
 import EditAmenityScreen from "../screens/EditAmenityScreen";
@@ -19,12 +20,14 @@ import EditCategoryScreen from "../screens/EditCategoryScreen";
 import EditClientScreen from "../screens/EditClientScreen";
 import EditHostingScreen from "../screens/EditHostingScreen";
 import EditReservationHostingScreen from "../screens/EditReservationHostingScreen";
+import EditReservationScreen from "../screens/EditReservationScreen";
 import EditReviewScreen from "../screens/EditReviewScreen";
 import HomeScreen from "../screens/HomeScreen";
 import HostingsScreen, { Hosting } from "../screens/HostingsScreen";
 import ReservationHostingsScreen, {
   ReservationHosting,
-} from "../screens/ReservationHostingScreen";
+} from "../screens/ReservationHostingsScreen";
+import ReservationsScreen, { Reservation } from "../screens/ReservationsScreen";
 import ReviewsScreen, { Review } from "../screens/ReviewsScreen";
 
 export type DrawerParamList = {
@@ -44,6 +47,9 @@ export type DrawerParamList = {
   Hostings: undefined;
   CreateHosting: undefined;
   EditHosting: { hosting: Hosting };
+  Reservations: undefined;
+  CreateReservation: undefined;
+  EditReservation: { reservation: Reservation };
   ReservationHostings: undefined;
   CreateReservationHosting: undefined;
   EditReservationHosting: { reservationHosting: ReservationHosting };
@@ -65,6 +71,8 @@ const DrawerNavigator = () => {
         drawerStyle: { backgroundColor: "#fff", width: 250 },
         headerStyle: { backgroundColor: "#4B7BE5" },
         headerTintColor: "#fff",
+        drawerType: "permanent", // <-- menu sempre fixo
+        // Não precisa de headerLeft no modo permanente
       }}
     >
       <Drawer.Screen
@@ -77,7 +85,6 @@ const DrawerNavigator = () => {
           title: "Início",
         }}
       />
-
       <Drawer.Screen
         name="Categories"
         component={CategoriesScreen}
@@ -104,7 +111,6 @@ const DrawerNavigator = () => {
           title: "Editar categoria",
         }}
       />
-
       <Drawer.Screen
         name="Amenities"
         component={AmenitiesScreen}
@@ -131,7 +137,6 @@ const DrawerNavigator = () => {
           title: "Editar comodidade",
         }}
       />
-
       <Drawer.Screen
         name="Address"
         component={AddressScreen}
@@ -158,7 +163,6 @@ const DrawerNavigator = () => {
           title: "Editar endereço",
         }}
       />
-
       <Drawer.Screen
         name="Clients"
         component={ClientsScreen}
@@ -185,10 +189,9 @@ const DrawerNavigator = () => {
           title: "Editar cliente",
         }}
       />
-
       <Drawer.Screen
-        name="Hosting"
-        component={HostingScreen}
+        name="Hostings"
+        component={HostingsScreen}
         options={{
           drawerIcon: ({ color, size }) => (
             <Ionicons name="bed-outline" size={size} color={color} />
@@ -212,37 +215,9 @@ const DrawerNavigator = () => {
           title: "Editar hospedagem",
         }}
       />
-
       <Drawer.Screen
-        name="ReservationHosting"
-        component={ReservationHostingScreen}
-        options={{
-          drawerIcon: ({ color, size }) => (
-            <Ionicons name="cart-outline" size={size} color={color} />
-          ),
-          title: "Reservas de Hospedagem",
-        }}
-      />
-      <Drawer.Screen
-        name="CreateReservationHosting"
-        component={CreateReservationHostingScreen}
-        options={{
-          drawerItemStyle: { display: "none" },
-          title: "Nova reserva de hospedagem",
-        }}
-      />
-      <Drawer.Screen
-        name="EditReservationHosting"
-        component={EditReservationHostingScreen}
-        options={{
-          drawerItemStyle: { display: "none" },
-          title: "Editar reserva de hospedagem",
-        }}
-      />
-
-      <Drawer.Screen
-        name="ReservationHosting"
-        component={ReservationHostingScreen}
+        name="Reservations"
+        component={ReservationsScreen}
         options={{
           drawerIcon: ({ color, size }) => (
             <Ionicons name="clipboard-outline" size={size} color={color} />
@@ -251,11 +226,37 @@ const DrawerNavigator = () => {
         }}
       />
       <Drawer.Screen
+        name="CreateReservation"
+        component={CreateReservationScreen}
+        options={{
+          drawerItemStyle: { display: "none" },
+          title: "Nova reserva",
+        }}
+      />
+      <Drawer.Screen
+        name="EditReservation"
+        component={EditReservationScreen}
+        options={{
+          drawerItemStyle: { display: "none" },
+          title: "Editar reserva",
+        }}
+      />
+      <Drawer.Screen
+        name="ReservationHostings"
+        component={ReservationHostingsScreen}
+        options={{
+          drawerIcon: ({ color, size }) => (
+            <Ionicons name="cart-outline" size={size} color={color} />
+          ),
+          title: "Itens da Reserva",
+        }}
+      />
+      <Drawer.Screen
         name="CreateReservationHosting"
         component={CreateReservationHostingScreen}
         options={{
           drawerItemStyle: { display: "none" },
-          title: "Nova reserva",
+          title: "Novo item de reserva",
         }}
       />
       <Drawer.Screen
@@ -263,10 +264,9 @@ const DrawerNavigator = () => {
         component={EditReservationHostingScreen}
         options={{
           drawerItemStyle: { display: "none" },
-          title: "Editar reserva",
+          title: "Editar item de reserva",
         }}
       />
-
       <Drawer.Screen
         name="Reviews"
         component={ReviewsScreen}

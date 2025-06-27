@@ -24,10 +24,12 @@ const EditReservationHosting = ({ route, navigation }: Props) => {
   const [unit_price, setUnitPrice] = useState(
     String(reservationHosting.unit_price)
   );
-  const [reservation, setReservation] = useState<Reservation>(
-    reservationHosting.reservation
+  const [reservation, setReservation] = useState<Reservation | null>(
+    reservationHosting.reservation ?? null
   );
-  const [hosting, setHosting] = useState<Hosting>(reservationHosting.hosting);
+  const [hosting, setHosting] = useState<Hosting | null>(
+    reservationHosting.hosting ?? null
+  );
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [hostings, setHostings] = useState<Hosting[]>([]);
   const [saving, setSaving] = useState(false);
@@ -35,8 +37,8 @@ const EditReservationHosting = ({ route, navigation }: Props) => {
   useEffect(() => {
     setQuantityDays(String(reservationHosting.quantity_days));
     setUnitPrice(String(reservationHosting.unit_price));
-    setReservation(reservationHosting.reservation);
-    setHosting(reservationHosting.hosting);
+    setReservation(reservationHosting.reservation ?? null);
+    setHosting(reservationHosting.hosting ?? null);
   }, [reservationHosting]);
 
   useEffect(() => {

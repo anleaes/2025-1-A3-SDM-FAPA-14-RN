@@ -1,10 +1,16 @@
+import { Ionicons } from "@expo/vector-icons";
 import { DrawerScreenProps } from "@react-navigation/drawer";
 import { useFocusEffect } from "expo-router";
 import React, { useCallback, useState } from "react";
-import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { DrawerParamList } from "../navigation/DrawerNavigator";
-import { Ionicons } from "@expo/vector-icons";
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { FlatList } from "react-native-gesture-handler";
+import { DrawerParamList } from "../navigation/DrawerNavigator";
 
 type Props = DrawerScreenProps<DrawerParamList, "Amenities">;
 
@@ -12,7 +18,7 @@ export type Amenity = {
   id: number;
   name: string;
   description: string;
-  is_avaible: boolean;
+  is_available: boolean;
   extra_cost: number;
   // photo?: string;
 };
@@ -23,8 +29,8 @@ const AmenitiesScreen = ({ navigation }: Props) => {
 
   const fetchAmenities = async () => {
     setLoading(true);
-    const response = await fetch("http://localhost:8000/comodidades/");
-    const data = await response.json();
+    const res = await fetch("http://localhost:8000/comodidades/");
+    const data = await res.json();
     setAmenities(data);
     setLoading(false);
   };
@@ -46,21 +52,25 @@ const AmenitiesScreen = ({ navigation }: Props) => {
     <View style={styles.card}>
       <Text style={styles.name}>{item.name}</Text>
       <Text style={styles.description}>{item.description}</Text>
-      <Text>Disponível: {item.is_avaible ? "Sim" : "Não"}</Text>
+      <Text>
+        Disponível:{" "}
+        {String(item.is_available).toLowerCase() === "true" ? "Sim" : "Não"}
+      </Text>
       <Text>Custo extra: {item.extra_cost}</Text>
-      {/* {item.photo && <Image source={{ uri: item.photo }}/>} */}
-      <TouchableOpacity
-        style={styles.editButton}
-        onPress={() => navigation.navigate("EditAmenity", { amenity: item })}
-      >
-        <Text style={styles.editText}>Editar</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.deleteButton}
-        onPress={() => handleDelete(item.id)}
-      >
-        <Text style={styles.editText}>Excluir</Text>
-      </TouchableOpacity>
+      <View style={styles.row}>
+        <TouchableOpacity
+          style={styles.editButton}
+          onPress={() => navigation.navigate("EditAmenity", { amenity: item })}
+        >
+          <Text style={styles.editText}>Editar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.deleteButton}
+          onPress={() => handleDelete(item.id)}
+        >
+          <Text style={styles.editText}>Excluir</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 
@@ -78,11 +88,11 @@ const AmenitiesScreen = ({ navigation }: Props) => {
         />
       )}
       <TouchableOpacity
-      style={styles.fab}
-      onPress={() => navigation.navigate('CreateAmenity')}
-    >
-      <Ionicons name="add" size={28} color="#fff"  />
-    </TouchableOpacity>
+        style={styles.fab}
+        onPress={() => navigation.navigate("CreateAmenity")}
+      >
+        <Ionicons name="add" size={28} color="#fff" />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -145,12 +155,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#E54848",
     padding: 8,
     borderRadius: 6,
-    marginRight: 8,
+    // remova o marginRight daqui!
   },
   row: {
     flexDirection: "row",
-    marginTop: 8,
-    alignSelf: "flex-end",
+    marginTop: 10,
+    justifyContent: "flex-end", // padronizado
   },
 });
 

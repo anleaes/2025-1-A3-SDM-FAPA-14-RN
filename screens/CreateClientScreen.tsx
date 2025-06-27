@@ -16,7 +16,7 @@ type Props = DrawerScreenProps<DrawerParamList, "CreateClient">;
 const CreateClient = ({ navigation }: Props) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+  const [cell_phone, setCellPhone] = useState("");
   const [gender, setGender] = useState<"M" | "F" | "O">("M");
   // const [doc, setDoc] = useState('');
   // const [photo, setPhoto] = useState('');
@@ -26,7 +26,7 @@ const CreateClient = ({ navigation }: Props) => {
     useCallback(() => {
       setName("");
       setEmail("");
-      setPhone("");
+      setCellPhone("");
       setGender("M");
       // setDoc('');
       // setPhoto('');
@@ -44,7 +44,7 @@ const CreateClient = ({ navigation }: Props) => {
       body: JSON.stringify({
         name,
         email,
-        phone,
+        cell_phone,
         gender,
         // doc,
         // photo,
@@ -68,8 +68,8 @@ const CreateClient = ({ navigation }: Props) => {
       />
       <Text style={styles.label}>Telefone</Text>
       <TextInput
-        value={phone}
-        onChangeText={setPhone}
+        value={cell_phone}
+        onChangeText={setCellPhone}
         style={styles.input}
         keyboardType="phone-pad"
       />

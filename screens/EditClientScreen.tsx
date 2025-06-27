@@ -16,19 +16,15 @@ const EditClientScreen = ({ route, navigation }: Props) => {
   const { client } = route.params;
   const [name, setName] = useState(client.name);
   const [email, setEmail] = useState(client.email);
-  const [phone, setPhone] = useState(client.phone);
+  const [cell_phone, setCellPhone] = useState(client.cell_phone); 
   const [gender, setGender] = useState<"M" | "F" | "O">(client.gender);
-  // const [doc, setDoc] = useState(client.doc || '');
-  // const [photo, setPhoto] = useState(client.photo || '');
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     setName(client.name);
     setEmail(client.email);
-    setPhone(client.phone);
+    setCellPhone(client.cell_phone); // <-- ajuste aqui
     setGender(client.gender);
-    // setDoc(client.doc || '');
-    // setPhoto(client.photo || '');
   }, [client]);
 
   const handleSave = async () => {
@@ -42,10 +38,8 @@ const EditClientScreen = ({ route, navigation }: Props) => {
       body: JSON.stringify({
         name,
         email,
-        phone,
+        cell_phone,
         gender,
-        // doc,
-        // photo,
       }),
     });
     navigation.navigate("Clients");
@@ -66,8 +60,8 @@ const EditClientScreen = ({ route, navigation }: Props) => {
       />
       <Text style={styles.label}>Telefone</Text>
       <TextInput
-        value={phone}
-        onChangeText={setPhone}
+        value={cell_phone}
+        onChangeText={setCellPhone}
         style={styles.input}
         keyboardType="phone-pad"
       />
@@ -89,20 +83,6 @@ const EditClientScreen = ({ route, navigation }: Props) => {
           onPress={() => setGender("O")}
         />
       </View>
-      {/* 
-      <Text style={styles.label}>Documento</Text>
-      <TextInput
-        value={doc}
-        onChangeText={setDoc}
-        style={styles.input}
-      />
-      <Text style={styles.label}>Foto</Text>
-      <TextInput
-        value={photo}
-        onChangeText={setPhoto}
-        style={styles.input}
-      />
-      */}
       {saving ? (
         <ActivityIndicator size="large" color="#4B7BE5" />
       ) : (
