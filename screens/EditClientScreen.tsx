@@ -17,6 +17,7 @@ const EditClientScreen = ({ route, navigation }: Props) => {
   const [name, setName] = useState(client.name);
   const [email, setEmail] = useState(client.email);
   const [phone, setPhone] = useState(client.phone);
+  const [gender, setGender] = useState<"M" | "F" | "O">(client.gender);
   // const [doc, setDoc] = useState(client.doc || '');
   // const [photo, setPhoto] = useState(client.photo || '');
   const [saving, setSaving] = useState(false);
@@ -25,6 +26,7 @@ const EditClientScreen = ({ route, navigation }: Props) => {
     setName(client.name);
     setEmail(client.email);
     setPhone(client.phone);
+    setGender(client.gender);
     // setDoc(client.doc || '');
     // setPhoto(client.photo || '');
   }, [client]);
@@ -41,6 +43,7 @@ const EditClientScreen = ({ route, navigation }: Props) => {
         name,
         email,
         phone,
+        gender,
         // doc,
         // photo,
       }),
@@ -68,6 +71,24 @@ const EditClientScreen = ({ route, navigation }: Props) => {
         style={styles.input}
         keyboardType="phone-pad"
       />
+      <Text style={styles.label}>Gênero</Text>
+      <View style={styles.genderRow}>
+        <Button
+          title="Masculino"
+          color={gender === "M" ? "#4B7BE5" : "#ccc"}
+          onPress={() => setGender("M")}
+        />
+        <Button
+          title="Feminino"
+          color={gender === "F" ? "#4B7BE5" : "#ccc"}
+          onPress={() => setGender("F")}
+        />
+        <Button
+          title="Outro"
+          color={gender === "O" ? "#4B7BE5" : "#ccc"}
+          onPress={() => setGender("O")}
+        />
+      </View>
       {/* 
       <Text style={styles.label}>Documento</Text>
       <TextInput
@@ -114,6 +135,11 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderRadius: 8,
     padding: 10,
+  },
+  genderRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 12,
   },
 });
 
