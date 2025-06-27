@@ -48,7 +48,7 @@ const AmenitiesScreen = ({ navigation }: Props) => {
       <Text style={styles.description}>{item.description}</Text>
       <Text>Disponível: {item.is_avaible ? "Sim" : "Não"}</Text>
       <Text>Custo extra: {item.extra_cost}</Text>
-      {/* {item.photo && <Image source={{ uri: item.photo }} style={{ width: 50, height: 50 }} />} */}
+      {/* {item.photo && <Image source={{ uri: item.photo }}/>} */}
       <TouchableOpacity
         style={styles.editButton}
         onPress={() => navigation.navigate("EditAmenity", { amenity: item })}
